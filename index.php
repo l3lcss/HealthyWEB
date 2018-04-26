@@ -6,6 +6,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet">
 	<style type="text/css">
 	@import url('https://fonts.googleapis.com/css?family=Jua');
@@ -444,18 +445,19 @@
 							<font color="#295ea4">2</font><font color="#fa5a5a">0</font><font color="#ffcb4f">1</font><font color="#00be70">8</font>"</h1>
 			      <br/>
 			      <br/>
+						<form id="validates">
 			      <table id="containRegis" border="0px">
 			        <tr>
 			          <td align="right">รหัสบัตรประชาชน :</td>
-			          <td><input type="text" name="id" maxlength="13" /></td>
+			          <td><input type="text" name="id" maxlength="13" required/></td>
 			        </tr>
 			        <tr>
 			          <td align="right">ชื่อ :</td>
-			          <td><input type="text" name="name"/></td>
+			          <td><input type="text" name="name" required/></td>
 			        </tr>
 			         <tr>
 			          <td align="right">นามสกุล :</td>
-			          <td><input type="text" name="lname"/></td>
+			          <td><input type="text" name="lname" required/></td>
 			        </tr>
 			         <tr>
 			          <td align="right">ประเภทการวิ่ง :</td>
@@ -473,7 +475,7 @@
 			        </tr>
 			        <tr>
 			          <td align="right">Facebook :</td>
-			          <td><input type="text" name="facebook" /></td>
+			          <td><input type="text" name="facebook" required/></td>
 			        </tr>
 			      </table>
 			      <br/>
@@ -488,6 +490,7 @@
 						  <div id="caption"></div>
 						</div>
 					</div>
+				</form>
 
 				</div>
 
@@ -495,31 +498,73 @@
       </div>
 			<script type="text/javascript">
 
-			// Get the modal
-			var modal = document.getElementById('myModal');
+						// Get the modal
+						var modal = document.getElementById('myModal');
 
-			// Get the image and insert it inside the modal - use its "alt" text as a caption
-			var img = document.getElementById('myImg');
-			var modalImg = document.getElementById("img01");
-			var captionText = document.getElementById("caption");
-			img.onclick = function(){
-			    modal.style.display = "block";
-			    modalImg.src = "QR.PNG";
-			    captionText.innerHTML = "ชำระค่าลงทะเบียนได้ตาม QR CODE นี้<br>หรือ PromptPay ได้ที่เบอร์ 0841410563<br>หลังจากโอนแล้ว ให้ส่งหลักฐานการโอนมาที่<br><font size=6>https://www.facebook.com/kmutnbwalkrun/</font> ";
-			}
+						// Get the image and insert it inside the modal - use its "alt" text as a caption
+						var img = document.getElementById('myImg');
+						var modalImg = document.getElementById("img01");
+						var captionText = document.getElementById("caption");
+						img.onclick = function(){
+						    modal.style.display = "block";
+						    modalImg.src = "QR.PNG";
+						    captionText.innerHTML = "ชำระค่าลงทะเบียนได้ตาม QR CODE นี้<br>หรือ PromptPay ได้ที่เบอร์ 0841410563<br>ชื่อบัญชี <font size=6>Saiwarun yenjitpissamai</font><br>หลังจากโอนแล้ว ให้ส่งหลักฐานการโอนมาที่<br><font size=6>https://www.facebook.com/kmutnbwalkrun/</font> ";
+						}
 
-			// Get the <span> element that closes the modal
-			var span = document.getElementsByClassName("close")[0];
+						// Get the <span> element that closes the modal
+						var span = document.getElementsByClassName("close")[0];
 
-			// When the user clicks on <span> (x), close the modal
-			span.onclick = function() {
-			    modal.style.display = "none";
-			}
-
+						// When the user clicks on <span> (x), close the modal
+						span.onclick = function() {
+						    modal.style.display = "none";
+						}
+						
 			$(document).ready(function(){
 				$(".searchData").hide();
 				$(".bt").click(function(){
 					$(".searchData").show();
+				});
+				$('#validates').validate({ // initialize the plugin
+						rules: {
+								id: {
+										required: true
+								},
+								name: {
+										required: true
+								},
+								lname: {
+										required: true
+								},
+								facebook: {
+										required: true
+								}
+						},
+						submitHandler: function(form) {
+							$.ajax({
+									 type: "POST",
+									 url: "insert_user.php",
+									 cache: false,
+									 data: $(form).serialize(),
+									 success: function(a)
+									 {
+											if(a.trim() == '1')
+											{
+													swal({
+															title: '<i>ลงทะเบียนสำเร็จแล้ว</i>',
+															type: 'success'
+													});
+											}
+											else
+											{
+													swal({
+															title: '<i>ระบบไม่สามารถบันทึกข้อมูลได้</i>',
+															type: 'error',
+															html: "ขออภัยในความไม่สะดวก"
+													});
+											}
+									 }
+							 });
+						}
 				});
 				$(".confirm").click(function(){
 							var name = $("input[name='namelname']").val();
@@ -538,28 +583,6 @@
 							   	}
 							 });
 					});
-          $(".confirm1").click(function(){
-              var id = $("input[name='id']").val();
-              var name = $("input[name='name']").val();
-              var lname = $("input[name='lname']").val();
-              var runType = $("input[name='runType']").val();
-              var facebook = $("input[name='facebook']").val();
-               //alert(id+name+lname+runType+facebook);
-              $.ajax({
-                   type: "POST",
-                   url: "insert_user.php",
-                   cache: false,
-                   data: "id="+id +"&name="+name+"&lname="+lname+"&runType="+runType+"&facebook="+facebook,
-                   success: function(msg){
-                     swal({
-                         title: '<i>ลงทะเบียนสำเร็จแล้ว</i>',
-                         type: 'success',
-                         html: msg
-                     });
-
-                  }
-               });
-          });
 				});
 			</script>
 </body>
