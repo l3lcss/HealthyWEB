@@ -28,11 +28,12 @@
 	}
      .confirm1
     {
+			float: left;
 			padding: 20px 0px 20px 0px;
 			text-decoration: none;
 			font-size: 300%;
 			border: none;
-			width: 100%;
+			width: 80%;
       font-family: 'Kanit', sans-serif;
       color: #000;
 			background: rgba(0, 190, 112, 0.5);
@@ -294,6 +295,108 @@
 				border-radius: 50%;
 				background: white;
 			}
+
+			/*-------------------------------------------------IMG_MODEL-------------------------------*/
+			#myImg {
+					width: 19.5%;
+					padding: 4.8% 0% 4.7% 0%;
+					float: right;
+					text-decoration: none;
+					font-size: 210%;
+					border: none;
+		      font-family: 'Kanit', sans-serif;
+		      color: #000;
+		  		transition: all ease-in-out 0.5s;
+		      background-color:#fa5a5a;
+			    cursor: pointer;
+			    transition: 0.3s;
+			}
+
+			#myImg:hover {
+					padding: 0px 0px 5% 0px;
+					cursor: pointer;
+					color: #fa5a5a;
+					background: rgba(0, 0, 0, 0.5);
+			}
+
+			/* The Modal (background) */
+			.modal {
+			    display: none; /* Hidden by default */
+			    position: fixed; /* Stay in place */
+			    z-index: 1; /* Sit on top */
+			    padding-top: 100px; /* Location of the box */
+			    left: 0;
+			    top: 0;
+			    width: 100%; /* Full width */
+			    height: 100%; /* Full height */
+			    overflow: auto; /* Enable scroll if needed */
+			    background-color: rgb(0,0,0); /* Fallback color */
+			    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+			}
+
+			/* Modal Content (image) */
+			.modal-content {
+			    margin: auto;
+			    display: block;
+			    width: 30%;
+			    max-width: 700px;
+			}
+
+			/* Caption of Modal Image */
+			#caption {
+			    margin: auto;
+			    display: block;
+			    width: 80%;
+			    max-width: 700px;
+			    text-align: center;
+			    color: #ccc;
+			    padding: 10px 0;
+			    height: 150px;
+			}
+
+			/* Add Animation */
+			.modal-content, #caption {
+			    -webkit-animation-name: zoom;
+			    -webkit-animation-duration: 0.6s;
+			    animation-name: zoom;
+			    animation-duration: 0.6s;
+			}
+
+			@-webkit-keyframes zoom {
+			    from {-webkit-transform:scale(0)}
+			    to {-webkit-transform:scale(1)}
+			}
+
+			@keyframes zoom {
+			    from {transform:scale(0)}
+			    to {transform:scale(1)}
+			}
+
+			/* The Close Button */
+			.close {
+			    position: absolute;
+			    top: 15px;
+			    right: 35px;
+			    color: #f1f1f1;
+			    font-size: 40px;
+			    font-weight: bold;
+			    transition: 0.3s;
+			}
+
+			.close:hover,
+			.close:focus {
+			    color: #bbb;
+			    text-decoration: none;
+			    cursor: pointer;
+			}
+
+			/* 100% Image Width on Smaller Screens */
+			@media only screen and (max-width: 700px){
+			    .modal-content {
+			        width: 100%;
+			    }
+			}
+			/*-------------------------------------------------IMG_MODEL[END]-------------------------------*/
 </style>
 </head>
 <body>
@@ -375,6 +478,15 @@
 			      </table>
 			      <br/>
 			      <input type='submit' class="confirm1" name="register" value="ลงทะเบียน" onClick=>
+
+						<button type="button" name="button" id="myImg" alt="Trolltunga, Norway" src="QR.PNG">ชำระเงิน</button>
+
+						<!-- The Modal -->
+						<div id="myModal" class="modal">
+						  <span class="close">&times;</span>
+						  <img class="modal-content" id="img01">
+						  <div id="caption"></div>
+						</div>
 					</div>
 
 				</div>
@@ -382,6 +494,28 @@
       </div>
       </div>
 			<script type="text/javascript">
+
+			// Get the modal
+			var modal = document.getElementById('myModal');
+
+			// Get the image and insert it inside the modal - use its "alt" text as a caption
+			var img = document.getElementById('myImg');
+			var modalImg = document.getElementById("img01");
+			var captionText = document.getElementById("caption");
+			img.onclick = function(){
+			    modal.style.display = "block";
+			    modalImg.src = "QR.PNG";
+			    captionText.innerHTML = "ชำระค่าลงทะเบียนได้ตาม QR CODE นี้<br>หรือ PromptPay ได้ที่เบอร์ 0841410563<br>หลังจากโอนแล้ว ให้ส่งหลักฐานการโอนมาที่<br><font size=6>https://www.facebook.com/kmutnbwalkrun/</font> ";
+			}
+
+			// Get the <span> element that closes the modal
+			var span = document.getElementsByClassName("close")[0];
+
+			// When the user clicks on <span> (x), close the modal
+			span.onclick = function() {
+			    modal.style.display = "none";
+			}
+
 			$(document).ready(function(){
 				$(".searchData").hide();
 				$(".bt").click(function(){
